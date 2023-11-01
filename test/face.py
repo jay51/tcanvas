@@ -1,4 +1,6 @@
 
+# TODO: import canvas & create inside test function
+
 def draw_face(c):
     # left eye
     row = 3
@@ -51,3 +53,23 @@ def draw_face(c):
 
     c.draw_canvas()
 
+
+
+def draw_face2(c):
+    # left eye
+    c.set_row_col(3, c.CANVAS_COLS//5, 4, c.LEFT)
+    c.set_row_col(3+1, c.CANVAS_COLS//5, 3, c.DOWN)
+    c.set_row_col(3+4, c.CANVAS_COLS//5, 4, c.LEFT)
+    c.set_row_col(3+3, (c.CANVAS_COLS//5)-3, 3, c.UP)
+
+    # right eye
+    c.set_row_col(3, (c.CANVAS_COLS//5) * 3, 4, c.LEFT)
+    c.set_row_col(3+1, (c.CANVAS_COLS//5) * 3, 3, c.DOWN)
+    c.set_row_col(3+4, (c.CANVAS_COLS//5) * 3, 4, c.LEFT)
+    c.set_row_col(3+3, ((c.CANVAS_COLS//5) * 3) - 3, 3, c.UP)
+
+    # mouth
+    c.set_row_col(15, (c.CANVAS_COLS//3) - 2, 10, c.RIGHT)
+
+
+    c.draw_canvas()

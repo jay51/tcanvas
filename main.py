@@ -1,12 +1,12 @@
 from tcanvas import canvas
-from test import draw_face
+from test import draw_face, draw_face2
 
 
 
 def main():
     c = canvas.Canvas(30,50, None, 'A', 'B')
+    draw_face2(c)
 
-    draw_face(c)
     while False:
         move = input('move ex. 1f: ')
         steps = move[0]

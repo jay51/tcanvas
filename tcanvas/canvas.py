@@ -32,8 +32,6 @@ class Canvas():
             print(row)
 
 
-
-
     def set_row_col(self, row, col, steps, dirct):
         pos = (row * self.CANVAS_COLS) + col
         self.set_at_idx(pos, steps, dirct)
