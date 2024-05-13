@@ -94,3 +94,63 @@ class Canvas():
         print(f'{self.CANVAS_ROWS=}')
 
 
+
+
+class Turutle:
+    def __init__(self, x=0, y=0, canvas=None):
+        self.x = x
+        self.y = y
+        self.angle = 0
+        self.canvas = Canvas(30,50) if not canvas else canvas
+
+
+    def forward(self, steps=1):
+        for i in range(steps):
+            origin = (self.x, self.y)
+            self.x = self.x+1
+
+            self.x, self.y = map(lambda x: round(x), self.rotate_vector((self.x,self.y), self.angle, origin))
+            self.canvas.set_cell(self.x, self.y)
+
+
+    def display(self):
+        self.canvas.cls()
+        self.canvas.draw_canvas()
+
+    def right(self, angle=45):
+        # if the keep doing right, at some point we can go above 360
+        # self.angle += angle #this also will work if i just keep it
+        if self.angle + angle > 360:
+            self.angle = angle
+        else:
+            self.angle += angle
+
+    def left(self, angle=45):
+        # if the keep doing right, at some point we can go below -360
+        # self.angle -= angle #this also will work if i just keep it
+        if self.angle - angle < -360:
+            self.angle = -angle
+        else:
+            self.angle -= angle
+
+
+    def rotate_vector(self, vector, angle, center=(0, 0)):
+        angle = math.radians(angle)
+
+        x, y = vector
+        cx, cy = center
+        x -= cx
+        y -= cy
+        cos_theta = math.cos(angle)
+        sin_theta = math.sin(angle)
+        x_prime = x * cos_theta - y * sin_theta
+        y_prime = x * sin_theta + y * cos_theta
+        x_prime += cx
+        y_prime += cy
+        return x_prime, y_prime
+
+
+    def print_info(self):
+        print(f'{self.x=}')
+        print(f'{self.y=}')
+        print(f'{self.angle=}')
