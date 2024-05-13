@@ -7,7 +7,7 @@
 run: main.py
 	echo 'run main.py'
 	clear
-	python main.py
+	python3 main.py
 
 
 test:
