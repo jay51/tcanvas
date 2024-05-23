@@ -53,18 +53,5 @@ def main():
 
 if os.getenv('TEST'):
     pass
-    # Example find angel
-    #angle = angle_between_points(x1, y1, x2, y2)
-    #print("Angle between points:", angle)
-
-    # Example Rotation angle in degrees
-    #rotated_x, rotated_y = rotate_matrix(x2, y2, 180)
-    # vector = [x2, y2]
-    # angle = -45
-    # rotated_vector = rotate_vector(vector, angle)
-
-    # print("Original vector:", vector)
-    # print("Rotated vector:", rotated_vector)
-
 elif __name__ == '__main__':
     main()
