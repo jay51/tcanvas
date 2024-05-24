@@ -24,6 +24,8 @@ class Canvas():
     def set_symbol(self, symbol):
         self.symbol = symbol
 
+    def clear_canvas(self, default_char=None):
+        self.canvas = [default_char if default_char else '.' for c in range(self.CANVAS_ROWS * self.CANVAS_COLS)]
 
     def cls(self):
         print('\x1b[2J\x1b[H', end='')
@@ -113,6 +115,9 @@ class Turutle:
             self.canvas.set_cell(self.x, self.y)
 
 
+    def clear_canvas(self):
+        self.canvas.clear_canvas()
+
     def display(self):
         self.canvas.cls()
         self.canvas.draw_canvas()
@@ -154,3 +159,125 @@ class Turutle:
         print(f'{self.x=}')
         print(f'{self.y=}')
         print(f'{self.angle=}')
+
+
+
+
+
+
+from termios import tcgetattr, TCSADRAIN, tcsetattr
+import math
+import time
+import os
+import sys, tty, select
+
+
+class Snake():
+
+    def __init__(self, snake_char='D', canvas=None):
+        self.length = 0
+        self.snake_char = 0
+        self.angle = 0
+        self.canvas = Canvas(30,50) if not canvas else canvas
+
+        # we need to use the snake as queue where we remove the tial and add new head
+        self.snake = [(0,0, snake_char)]
+
+
+    def rotate_vector(self, vector, angle, center=(0, 0)):
+        angle = math.radians(angle)
+
+        x, y = vector
+        cx, cy = center
+        x -= cx
+        y -= cy
+        cos_theta = math.cos(angle)
+        sin_theta = math.sin(angle)
+        x_prime = x * cos_theta - y * sin_theta
+        y_prime = x * sin_theta + y * cos_theta
+        x_prime += cx
+        y_prime += cy
+        return x_prime, y_prime
+
+
+    def read(self, f=sys.stdin, old_attr=tcgetattr(sys.stdin.fileno()), time=1, chars=1):
+        '''
+        cooperative io read from stdin/terminal without pressing enter
+        '''
+
+        try:
+            tty.setraw(f.fileno())
+            rlist, o, e = select.select([f], [], [], time)
+        finally:
+            tcsetattr(f.fileno(), TCSADRAIN, old_attr)
+
+        if sys.stdin in rlist:
+            return sys.stdin.read(chars)
+
+        return ''
+
+    def right(self, angle=45):
+        self.angle += angle
+
+    def left(self, angle=45):
+        self.angle -= angle
+
+
+    def remove_tail(self):
+        self.snake.pop(0)
+
+    def get_head(self):
+        return self.snake[-1]
+
+
+    def add_new_head(self):
+        x, y, _ = self.get_head()
+        origin = (x, y)
+        x = x + 1
+
+        x, y = map(lambda x: round(x), self.rotate_vector((x,y), self.angle, origin))
+        self.snake.append([x, y, self.snake_char])
+
+    def move(self):
+        self.add_new_head()
+        self.remove_tail()
+
+        for point in self.snake:
+            self.canvas.set_cell(point[0], point[1], point[2])
+
+    def run(self):
+        f = sys.stdin
+        old_attr = tcgetattr(f.fileno())
+        previous_time = time.time()
+
+        while True:
+            current_time = time.time()
+            delta_time = current_time - previous_time
+
+            buff = self.read(f, old_attr, time=1)
+            if True: #delta_time >= 1.0:
+                self.canvas.cls()
+                self.canvas.draw_canvas()
+
+                if buff == 't':
+                    self.add_new_head()
+                if buff == 'w':
+                    self.left()
+                    self.left()
+                if buff == 's':
+                    self.right()
+                    self.right()
+                if buff == 'd':
+                    self.right()
+                if buff == 'a':
+                    self.left()
+                if buff == 'e':
+                    exit()
+
+                self.canvas.cls()
+                self.canvas.clear_canvas()
+                self.move()
+                self.canvas.draw_canvas()
+
+                previous_time = current_time
+

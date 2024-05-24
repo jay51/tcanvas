@@ -24,27 +24,29 @@ def read(f=sys.stdin, old_attr=tcgetattr(sys.stdin.fileno()), time=1, chars=1):
 
 
 def main():
-    t = canvas.Turutle(0,0)
+    # t = canvas.Turutle(0,0)
 
-    f = sys.stdin
-    old_attr = tcgetattr(f.fileno())
+    # f = sys.stdin
+    # old_attr = tcgetattr(f.fileno())
 
-    while True:
+    # while True:
+    #     t.clear_canvas()
+    #     t.display()
+    #     t.forward()
+    #     # t.print_info()
 
-        t.display()
-        t.forward()
-        # t.print_info()
+    #     buff = read(f, old_attr)
+    #     if buff == 'f':
+    #         t.forward()
+    #     if buff == 'r':
+    #         t.right()
+    #     if buff == 'l':
+    #         t.left()
+    #     if buff == 'e':
+    #         exit()
 
-        buff = read(f, old_attr)
-        if buff == 'f':
-            t.forward()
-        if buff == 'r':
-            t.right()
-        if buff == 'l':
-            t.left()
-        if buff == 'e':
-            exit()
-
+    snake = canvas.Snake()
+    snake.run()
 
 
 
