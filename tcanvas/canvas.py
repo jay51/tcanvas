@@ -86,7 +86,7 @@ class Canvas():
         pos = (y * self.CANVAS_COLS) + x
         row_n = pos // self.CANVAS_ROWS
         rigth_most = (row_n * self.CANVAS_COLS) + self.CANVAS_COLS
-        self.canvas[pos] = self.symbol
+        self.canvas[pos] = symbol if symbol else self.symbol
 
 
 
@@ -238,6 +238,13 @@ class Snake():
         x, y = map(lambda x: round(x), self.rotate_vector((x,y), self.angle, origin))
         self.snake.append([x, y, self.snake_char])
 
+    def new_food(self):
+        import random
+        x = random.randint(0, 49)
+        y = random.randint(0, 29)
+
+        return (x,y)
+
     def move(self):
         self.add_new_head()
         self.remove_tail()
@@ -249,12 +256,20 @@ class Snake():
         f = sys.stdin
         old_attr = tcgetattr(f.fileno())
         previous_time = time.time()
+        food = self.new_food()
 
         while True:
             current_time = time.time()
             delta_time = current_time - previous_time
 
             buff = self.read(f, old_attr, time=1)
+            if delta_time >= 2.0:
+                # display new food
+                food = self.new_food()
+                print(f'update food {food[0]=} {food[1]=}')
+                # time.sleep(1)
+                previous_time = current_time
+
             if True: #delta_time >= 1.0:
                 self.canvas.cls()
                 self.canvas.draw_canvas()
@@ -277,7 +292,8 @@ class Snake():
                 self.canvas.cls()
                 self.canvas.clear_canvas()
                 self.move()
+                self.canvas.set_cell(food[0], food[1], '#')
                 self.canvas.draw_canvas()
 
-                previous_time = current_time
 
+#..................................................
