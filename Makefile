@@ -1,5 +1,6 @@
 
 
+NAME := 'turtule'
 
 .PHONY: test
 
@@ -12,11 +13,12 @@ run: main.py
 
 test:
 	clear
-	python -m test
+	# make test NAME=turtule
+	python3 -m test $(NAME)
     
 venv:
-	python -m venv venv
+	python3 -m venv venv
 
 
 install: venv
-	source ./venv/bin/activate; python -m pip install -r requirements.txt
+	source ./venv/bin/activate; python3 -m pip install -r requirements.txt
