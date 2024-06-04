@@ -6,22 +6,6 @@ import math
 import os
 import sys, tty, select
 
-def read(f=sys.stdin, old_attr=tcgetattr(sys.stdin.fileno()), time=1, chars=1):
-    '''
-        cooperative io read from stdin/terminal without pressing enter
-    '''
-
-    try:
-        tty.setraw(f.fileno())
-        rlist, o, e = select.select([f], [], [], time)
-    finally:
-        tcsetattr(f.fileno(), TCSADRAIN, old_attr)
-
-    if sys.stdin in rlist:
-        return sys.stdin.read(chars)
-
-    return ''
-
 
 def main():
 
@@ -31,9 +15,9 @@ def main():
 
 
 
-
-
 if os.getenv('TEST'):
+    print('-' * 10)
     pass
+    print('-' * 10)
 elif __name__ == '__main__':
     main()
