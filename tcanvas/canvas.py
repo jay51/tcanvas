@@ -263,7 +263,7 @@ class Snake():
             delta_time = current_time - previous_time
 
             buff = self.read(f, old_attr, time=1)
-            if delta_time >= 2.0:
+            if delta_time >= 10.0:
                 # display new food
                 food = self.new_food()
                 print(f'update food {food[0]=} {food[1]=}')
@@ -294,6 +294,14 @@ class Snake():
                 self.move()
                 self.canvas.set_cell(food[0], food[1], '#')
                 self.canvas.draw_canvas()
+
+            head = self.get_head()
+            print(f'food {food[0]=} {food[1]=}  {head[0]=} {head[1]=}------------------------------')
+
+            if head[0] == food[0] and head[1] == food[1]:
+                print('eating ------------------------------')
+                food = self.new_food()
+                self.add_new_head()
 
 
 #..................................................
