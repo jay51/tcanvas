@@ -1,10 +1,16 @@
 
 import math
+import curses
 
 
 class Canvas():
 
     def __init__(self, rows, cols, canvas=None, symbol='>'):
+        self.stdscr = curses.initscr()
+        self.curses.nocbreak()
+        self.stdscr.keypad(True)
+        self.curses.echo()
+
         self.CANVAS_ROWS = rows # vertical
         self.CANVAS_COLS = cols # horozontal
         self.CANVAS_SIZE = self.CANVAS_ROWS * self.CANVAS_COLS
@@ -17,6 +23,9 @@ class Canvas():
         self.DOWN    = 'D'
         self.LEFT    = 'L'
         self.RIGHT   = 'R'
+
+    def read_char(self):
+        return self.stdscr.read_char()
 
     def make_canvas(self) -> [str]:
         return ['.' for c in range(self.CANVAS_ROWS * self.CANVAS_COLS)]
@@ -36,7 +45,7 @@ class Canvas():
             # print(row_start)
 
             row = ' '.join([ self.canvas[c] for c in range(row_start, row_start + self.CANVAS_COLS) ])
-            print(row)
+            self.stdscr.addstr(row)
 
 
     def set_xy(self, x, y, steps, dirct):
@@ -262,7 +271,8 @@ class Snake():
             current_time = time.time()
             delta_time = current_time - previous_time
 
-            buff = self.read(f, old_attr, time=1)
+            # buff = self.read(f, old_attr, time=1)
+            buff = self.canvas.read_char()
             if delta_time >= 10.0:
                 # display new food
                 food = self.new_food()
